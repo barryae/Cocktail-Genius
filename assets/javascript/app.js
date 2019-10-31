@@ -9,42 +9,61 @@ function chooseFile() {
     $("#fileInput").click();
 }
 
-const body = {
-    requests: [
-        {
-            image: {
-                source: {
-                    //Figure out how to put our photo here:
-                    imageUri: "https://cloud.google.com/vision/docs/images/bicycle_example.png"
+    var urlSearchVar ='';
 
-                }
-            },
-            features: [
-                {
-                    maxResults: 10,
-                    //Want to use text as well
-                    type: "OBJECT_LOCALIZATION"
-                }
-            ]
-        }
-    ]
-}
-var settings = {
-    "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
-    "method": "POST",
-    "headers": {
-        "Content-Type": "application/json",
-    },
-    "data": JSON.stringify(body)
-}
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
+$("#search-button").on("click", function(){
+    urlSearchVar = $("#UriSearch").val();
+    console.log(urlSearchVar);
+
+    const body = {
+        requests: [
+            {
+                image: {
+                    source: {
+                        //Figure out how to put our photo here:
+                        imageUri: `${urlSearchVar}`,
+                       
+                    }
+                },
+                features: [
+                    {
+                        maxResults: 10,
+                        //Want to use text as well
+                        type: "LABEL_DETECTION"
+                    }
+                ]
+            }
+        ]
+    }
+
+
+    var settings = {
+        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "data": JSON.stringify(body)
+    }
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+        var result = response.responses[0].labelAnnotations[0].description;
+        console.log(result);
+        var myJSON = JSON.stringify(result);
+        $(".results").append("<h1>"+myJSON+"</h1>");
+})
+
+
+   
+
 });
 
 const realFileBtn = document.getElementById("real-file");
 const customBtn = document.getElementById("custom-button");
 const customTxt = document.getElementById("custom-text");
+
 
 customBtn.addEventListener("click", function () {
     realFileBtn.click();
