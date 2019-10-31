@@ -60,35 +60,51 @@ realFileBtn.addEventListener("change", function () {
     }
 });
 
-//Cocktail DB request:
-//params based on keywords from Vision AI
-//tries out different parameter permutations
-//looks up each of those recipes by id , dumps JSON info for each
-//filters those recipes to those with 5 or less 
-//ingredients (or a number determined by max 
-// number of ingredients)
 
-let params = 'gin,lime'
+let visionAIKeywords = [];
+let ingredientsList = [];
+const ingredientsQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
+
+const multiIngredientQueryUrl = 'https://www.thecocktaildb.com/api/json/v2/8673533/filter.php?i='
+const recipeIdQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i='
+
+let filteredIngredientKeywords = []
+function ingredientsFilter() {
+
+
+}
+
+let ingredientQueries = []
+function queryPermutations() {
+
+    return ingredientQueries;
+}
+
 let ids = []
+function getIds() {
+    return ids;
+}
 
-function initialCocktailDBQuery() {
-    cocktailQuery = 'https://www.thecocktaildb.com/api/json/v2/8673533/filter.php?i=' + params
+let recipeResults = []
+function queryIds() {
+    return recipeResults;
+}
+
+
+function getIngredientsList() {
     $.ajax({
-        url: cocktailQuery,
-        type: 'GET'
+        url: ingredientsQueryUrl,
+        method: 'GET'
     }).then(function (response) {
-        console.log(response);
-        for (let i = 0; i < response.length; i++) {
-            id = response[i].idDrink
-            ids.push(id)
+        let drinksArr = response.drinks;
+        for (let i = 0; i < drinksArr.length; i++) {
+            let ingredient = drinksArr[i].strIngredient1;
+            ingredientsList.push(ingredient);
         }
-        IdQuery()
+        console.log(ingredientsList);
     })
 }
 
-function initialCocktailDBQuery() {
-
-}
 
 //format 
 // Title of Cocktail
