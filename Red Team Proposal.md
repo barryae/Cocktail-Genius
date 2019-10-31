@@ -1,16 +1,16 @@
-# Cocktail-Genius
+# Cocktail-Genius Red Team Proposal
 
-Project Title:
-- Cocktail Genius
+# Project Title:
+    - Cocktail Genius
 
-Team Members:
-- Barry Ervin
-- Neely Anne Mann
-- James H Abney
-- Oliver Almaguer Tostado
+# Team Members:
+    - Barry Ervin
+    - Neely Anne Mann
+    - James H Abney
+    - Oliver Almaguer Tostado
 
-Project Description:
-- Our project is Cocktail Genius. It is a web application that helps 
+# Project Description:
+    - Our project is Cocktail Genius. It is a web application that helps 
     a user figure out what cocktails he or she can make wih only a
     picture of the available ingredients. 
 
@@ -34,17 +34,17 @@ Project Description:
     - show recipes in an organized manner
     - allow user to click on URLs and check the recipe out.
 
-APIs Used:
-- Google Vision AI
-- Google Custom Search
+# APIs Used:
+    - Google Vision AI
+    - Google Custom Search
 
-New Technology:
-- Postman
-- Gcloud SDK
-- Web Scraper?
+# New Technology:
+    - Postman
+    - Gcloud SDK
+    - Web Scraper?
 
-Tasks:
-- Front-End: Barry 
-- Custom Search Engine API: Oliver
-- Vision AI API: Neely & James
+# Tasks:
+    - Front-End: Barry 
+    - Custom Search Engine API: Oliver
+    - Vision AI API: Neely & James
 
