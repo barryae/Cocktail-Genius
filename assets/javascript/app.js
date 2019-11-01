@@ -75,6 +75,7 @@ realFileBtn.addEventListener("change", function (event) {
     }
 });
 
+
 $("#real-file").change(function (event) {
     console.log(event.target.files)
     encodeImageFileAsURL(event.target);
@@ -98,26 +99,53 @@ function encodeImageFileAsURL(element) {
 // number of ingredients)
 
 let params = 'gin,lime'
-let ids = []
 
-function initialCocktailDBQuery() {
-    cocktailQuery = 'https://www.thecocktaildb.com/api/json/v2/8673533/filter.php?i=' + params
+
+let visionAIKeywords = [];
+let ingredientsList = [];
+const ingredientsQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
+
+const multiIngredientQueryUrl = 'https://www.thecocktaildb.com/api/json/v2/8673533/filter.php?i='
+const recipeIdQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i='
+
+let filteredIngredientKeywords = []
+function ingredientsFilter() {
+
+
+}
+
+let ingredientQueries = []
+function queryPermutations() {
+
+    return ingredientQueries;
+}
+
+
+let ids = []
+function getIds() {
+    return ids;
+}
+
+let recipeResults = []
+function queryIds() {
+    return recipeResults;
+}
+
+
+function getIngredientsList() {
     $.ajax({
-        url: cocktailQuery,
-        type: 'GET'
+        url: ingredientsQueryUrl,
+        method: 'GET'
     }).then(function (response) {
-        console.log(response);
-        for (let i = 0; i < response.length; i++) {
-            id = response[i].idDrink
-            ids.push(id)
+        let drinksArr = response.drinks;
+        for (let i = 0; i < drinksArr.length; i++) {
+            let ingredient = drinksArr[i].strIngredient1;
+            ingredientsList.push(ingredient);
         }
-        IdQuery()
+        console.log(ingredientsList);
     })
 }
 
-function initialCocktailDBQuery() {
-
-}
 
 //format 
 // Title of Cocktail
