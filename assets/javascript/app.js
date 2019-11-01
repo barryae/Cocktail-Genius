@@ -5,26 +5,21 @@
 //(use a list of liquor types to look for?
 //use a list of all ingredients?)
 
-function chooseFile() {
-    $("#fileInput").click();
-}
-
-    var urlSearchVar ='';
+var urlSearchVar = '';
+let uploadedImage
 
 
-$("#search-button").on("click", function(){
-    urlSearchVar = $("#UriSearch").val();
+$("#search-button").on("click", function () {
+    //urlSearchVar = $("#UriSearch").val();
     console.log(urlSearchVar);
+
+
 
     const body = {
         requests: [
             {
                 image: {
-                    source: {
-                        //Figure out how to put our photo here:
-                        imageUri: `${urlSearchVar}`,
-                       
-                    }
+                    content: `${urlSearchVar}`
                 },
                 features: [
                     {
@@ -52,11 +47,11 @@ $("#search-button").on("click", function(){
         var result = response.responses[0].labelAnnotations[0].description;
         console.log(result);
         var myJSON = JSON.stringify(result);
-        $(".results").append("<h1>"+myJSON+"</h1>");
-})
+        $(".results").append("<h1>" + myJSON + "</h1>");
+    })
 
 
-   
+
 
 });
 
@@ -69,7 +64,8 @@ customBtn.addEventListener("click", function () {
     realFileBtn.click();
 });
 
-realFileBtn.addEventListener("change", function () {
+realFileBtn.addEventListener("change", function (event) {
+    console.log(event.target.files[0])
     if (realFileBtn.value) {
         customTxt.innerHTML = realFileBtn.value.match(
             /[\/\\]([\w\d\s\.\-\(\)]+)$/
@@ -78,6 +74,31 @@ realFileBtn.addEventListener("change", function () {
         customTxt.innerHTML = "No file chosen, yet.";
     }
 });
+
+
+$("#real-file").change(function (event) {
+    console.log(event.target.files)
+    encodeImageFileAsURL(event.target);
+});
+
+function encodeImageFileAsURL(element) {
+    var file = element.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function() {
+     urlSearchVar = reader.result.split(',')[1]
+    }
+    reader.readAsDataURL(file);
+  }
+
+//Cocktail DB request:
+//params based on keywords from Vision AI
+//tries out different parameter permutations
+//looks up each of those recipes by id , dumps JSON info for each
+//filters those recipes to those with 5 or less 
+//ingredients (or a number determined by max 
+// number of ingredients)
+
+let params = 'gin,lime'
 
 
 let visionAIKeywords = [];
@@ -98,6 +119,7 @@ function queryPermutations() {
 
     return ingredientQueries;
 }
+
 
 let ids = []
 function getIds() {
