@@ -5,28 +5,21 @@
 //(use a list of liquor types to look for?
 //use a list of all ingredients?)
 
-function chooseFile() {
-    $("#fileInput").click();
-}
-
-    var urlSearchVar ='';
+var urlSearchVar = '';
+let uploadedImage
 
 
-$("#search-button").on("click", function(){
-    urlSearchVar = $("#UriSearch").val();
+$("#search-button").on("click", function () {
+    //urlSearchVar = $("#UriSearch").val();
     console.log(urlSearchVar);
     
 
-function textDetection() {
-    body = {
+
+    const body = {
         requests: [
             {
                 image: {
-                    source: {
-                        //Figure out how to put our photo here:
-                        imageUri: `${urlSearchVar}`,
-                       
-                    }
+                    content: `${urlSearchVar}`
                 },
                 features: [
                     {
@@ -132,6 +125,7 @@ function objectLocal() {
        
     }
     $.ajax(settings).done(function (response) {
+
        console.log(response);
        var resultText;
        var arrayTextLabel = [];
@@ -187,6 +181,7 @@ function objectLocal() {
 
 
 
+
 });
 
 const realFileBtn = document.getElementById("real-file");
@@ -198,7 +193,8 @@ customBtn.addEventListener("click", function () {
     realFileBtn.click();
 });
 
-realFileBtn.addEventListener("change", function () {
+realFileBtn.addEventListener("change", function (event) {
+    console.log(event.target.files[0])
     if (realFileBtn.value) {
         customTxt.innerHTML = realFileBtn.value.match(
             /[\/\\]([\w\d\s\.\-\(\)]+)$/
@@ -207,6 +203,21 @@ realFileBtn.addEventListener("change", function () {
         customTxt.innerHTML = "No file chosen, yet.";
     }
 });
+
+
+$("#real-file").change(function (event) {
+    console.log(event.target.files)
+    encodeImageFileAsURL(event.target);
+});
+
+function encodeImageFileAsURL(element) {
+    var file = element.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function() {
+     urlSearchVar = reader.result.split(',')[1]
+    }
+    reader.readAsDataURL(file);
+  }
 
 //Cocktail DB request:
 //params based on keywords from Vision AI
@@ -217,27 +228,59 @@ realFileBtn.addEventListener("change", function () {
 // number of ingredients)
 
 let params = 'gin,lime'
+
+
+let visionAIKeywords = [];
+let ingredientsList = [];
+const ingredientsQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
+
+const multiIngredientQueryUrl = 'https://www.thecocktaildb.com/api/json/v2/8673533/filter.php?i='
+const recipeIdQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i='
+
+let filteredIngredientKeywords = []
+function ingredientsFilter() {
+
+
+}
+
+let ingredientQueries = []
+function queryPermutations() {
+
+    return ingredientQueries;
+}
+
+
 let ids = []
-
-function initialCocktailDBQuery() {
-    cocktailQuery = 'https://www.thecocktaildb.com/api/json/v2/8673533/filter.php?i=' + params
-    $.ajax({
-        url: cocktailQuery,
-        type: 'GET',
-        type2: 'GET',
-    }).then(function (response) {
-        console.log(response);
-        for (let i = 0; i < response.length; i++) {
-            id = response[i].idDrink
-            ids.push(id)
-        }
-        IdQuery()
-    })
+function getIds() {
+    return ids;
 }
 
-function initialCocktailDBQuery() {
-
+let recipeResults = []
+function queryIds() {
+    return recipeResults;
 }
+
+
+// function getIngredientsList() {
+//     $.ajax({
+// <<<<<<< vision-keywords-array
+//         url: cocktailQuery,
+//         type: 'GET',
+//         type2: 'GET',
+// =======
+//         url: ingredientsQueryUrl,
+//         method: 'GET'
+// >>>>>>> master
+//     }).then(function (response) {
+//         let drinksArr = response.drinks;
+//         for (let i = 0; i < drinksArr.length; i++) {
+//             let ingredient = drinksArr[i].strIngredient1;
+//             ingredientsList.push(ingredient);
+//         }
+//         console.log(ingredientsList);
+//     })
+// }
+
 
 //format 
 // Title of Cocktail
