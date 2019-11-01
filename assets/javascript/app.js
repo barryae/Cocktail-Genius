@@ -12,7 +12,7 @@ let uploadedImage
 $("#search-button").on("click", function () {
     //urlSearchVar = $("#UriSearch").val();
     console.log(urlSearchVar);
-
+    
 
 
     const body = {
@@ -25,13 +25,75 @@ $("#search-button").on("click", function () {
                     {
                         maxResults: 10,
                         //Want to use text as well
-                        type: "LABEL_DETECTION"
+                    
+                        type: "TEXT_DETECTION", 
+                       
+
+                        
                     }
                 ]
             }
         ]
     }
+}
 
+function labelDetection() {
+    body2 = {
+        requests: [
+            {
+                image: {
+                    source: {
+                        //Figure out how to put our photo here:
+                        imageUri: `${urlSearchVar}`,
+                       
+                    }
+                },
+                features: [
+                    {
+                        maxResults: 10,
+                        //Want to use text as well
+                    
+                        type: "LABEL_DETECTION", 
+                       
+
+                        
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+function objectLocal() {
+    body3 = {
+        requests: [
+            {
+                image: {
+                    source: {
+                        //Figure out how to put our photo here:
+                        imageUri: `${urlSearchVar}`,
+                       
+                    }
+                },
+                features: [
+                    {
+                        maxResults: 10,
+                        //Want to use text as well
+                    
+                        type: "OBJECT_LOCALIZATION", 
+                       
+
+                        
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+    textDetection();
+    labelDetection();
+    objectLocal();
 
     var settings = {
         "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
@@ -39,16 +101,83 @@ $("#search-button").on("click", function () {
         "headers": {
             "Content-Type": "application/json",
         },
-        "data": JSON.stringify(body)
+        "data": JSON.stringify(body),
+       
     }
 
+    var settings2 = {
+        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "data": JSON.stringify(body2),
+       
+    }
+
+    var settings3 = {
+        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "data": JSON.stringify(body3),
+       
+    }
     $.ajax(settings).done(function (response) {
-        console.log(response);
-        var result = response.responses[0].labelAnnotations[0].description;
-        console.log(result);
-        var myJSON = JSON.stringify(result);
-        $(".results").append("<h1>" + myJSON + "</h1>");
+
+       console.log(response);
+       var resultText;
+       var arrayTextLabel = [];
+        //TEXT DETECTION
+        for (var i=0;i<response.responses[0].textAnnotations.length;i++) {
+        resultText = response.responses[0].textAnnotations[i].description;
+        console.log(response.responses[0].textAnnotations[i].description);
+        arrayTextLabel.push(resultText)
+        // var myJSON = JSON.stringify(resultText);
+        // var resultText3 = response.responses[0].textAnnotations[0].description;
+        
+        
+        }
+        $.ajax(settings2).done(function (response2) {
+            // WORKING CODE FOR LABEL_DETECTION
+              var resultLabel;
+              
+             for (var i=0;i<response2.responses[0].labelAnnotations.length;i++){
+             resultLabel = response2.responses[0].labelAnnotations[i].description;
+             arrayTextLabel.push(resultLabel);
+            
+             // var myJSON = JSON.stringify(resultLabel);
+             // var result3 = response2.responses[0].labelAnnotations[0].description;
+             
+         }
+             
+     })
+
+
+        console.log(arrayTextLabel);
+
     })
+    
+
+
+
+
+        // var cocktail = {
+        //     "url": "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i="+result3,
+        //     "method": "GET",
+        // }
+                
+        // $.ajax(cocktail).done(function (responseCocktail) {
+        //     console.log(responseCocktail);
+        //     for(let i=0;i<10;i++) {
+        //     var result2 = responseCocktail.drinks[i].strDrink;
+        //     var myJSON2 = JSON.stringify(result2);
+        //     $(".results").append("<h1>"+myJSON2+"</h1>");
+        //     }
+        // })
+
+
 
 
 
@@ -132,19 +261,25 @@ function queryIds() {
 }
 
 
-function getIngredientsList() {
-    $.ajax({
-        url: ingredientsQueryUrl,
-        method: 'GET'
-    }).then(function (response) {
-        let drinksArr = response.drinks;
-        for (let i = 0; i < drinksArr.length; i++) {
-            let ingredient = drinksArr[i].strIngredient1;
-            ingredientsList.push(ingredient);
-        }
-        console.log(ingredientsList);
-    })
-}
+// function getIngredientsList() {
+//     $.ajax({
+// <<<<<<< vision-keywords-array
+//         url: cocktailQuery,
+//         type: 'GET',
+//         type2: 'GET',
+// =======
+//         url: ingredientsQueryUrl,
+//         method: 'GET'
+// >>>>>>> master
+//     }).then(function (response) {
+//         let drinksArr = response.drinks;
+//         for (let i = 0; i < drinksArr.length; i++) {
+//             let ingredient = drinksArr[i].strIngredient1;
+//             ingredientsList.push(ingredient);
+//         }
+//         console.log(ingredientsList);
+//     })
+// }
 
 
 //format 
