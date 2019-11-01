@@ -134,38 +134,39 @@ function objectLocal() {
     $.ajax(settings).done(function (response) {
        console.log(response);
        var resultText;
-       var arrayText = [];
+       var arrayTextLabel = [];
         //TEXT DETECTION
         for (var i=0;i<response.responses[0].textAnnotations.length;i++) {
         resultText = response.responses[0].textAnnotations[i].description;
         console.log(response.responses[0].textAnnotations[i].description);
-        arrayText.push(resultText)
+        arrayTextLabel.push(resultText)
         // var myJSON = JSON.stringify(resultText);
         // var resultText3 = response.responses[0].textAnnotations[0].description;
         
         
         }
-        
-        //arrayText.push(resultText);
-        console.log(arrayText);
+        $.ajax(settings2).done(function (response2) {
+            // WORKING CODE FOR LABEL_DETECTION
+              var resultLabel;
+              
+             for (var i=0;i<response2.responses[0].labelAnnotations.length;i++){
+             resultLabel = response2.responses[0].labelAnnotations[i].description;
+             arrayTextLabel.push(resultLabel);
+            
+             // var myJSON = JSON.stringify(resultLabel);
+             // var result3 = response2.responses[0].labelAnnotations[0].description;
+             
+         }
+             
+     })
+
+
+        console.log(arrayTextLabel);
 
     })
     
 
-    $.ajax(settings2).done(function (response2) {
-       // WORKING CODE FOR LABEL_DETECTION
-         var resultLabel;
-         var arrayLabel = [];
-        for (var i=0;i<response2.responses[0].labelAnnotations.length;i++){
-        resultLabel = response2.responses[0].labelAnnotations[i].description;
-        arrayLabel.push(resultLabel);
-       
-        // var myJSON = JSON.stringify(resultLabel);
-        // var result3 = response2.responses[0].labelAnnotations[0].description;
-        
-    }
-        console.log(arrayLabel);
-})
+
 
 
         // var cocktail = {
