@@ -65,7 +65,6 @@ realFileBtn.addEventListener("change", function () {
 //Here starts cocktails DB code:
 
 //keywords from Vision AI image analysis
-let visionAIKeywords = [];
 
 //list of ingredients taken from CocktailsDB
 
@@ -80,27 +79,14 @@ const recipeIdQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php
 
 //function to test functions specific to Cocktail DB
 //(add to main() later)
-
-let ingredientQueries = [];
-let arrayTextLabel = ['asdf', "rum", 'lime juice', 'gin', 'vodka', 'tequila']
-
-let queryString = '';
-let queryArr = [];
-// let ingredientsList = [];
-
+let visionAIKeywords = ['lime', 'vodka', 'sugar']
+let recipes = [];
 function cocktailDBTest() {
     const ingredientsList = getIngredientsList();
     console.log(ingredientsList);
     ingredientsFilter(ingredientsList);
     console.log(filteredIngredientKeywords);
-    //
-    //console.log(queryArr)
 }
-
-// cocktailDBTest();
-
-
-
 
 function ingredientsFilter(ingredientsList, arr) {
     let filteredIngredientKeywords = [];
@@ -131,67 +117,76 @@ function queryStringMaker(arr) {
         }
     }
     getIds(queryStrings)
+        .then(function (ids) {
+            ids = ids.flat()
+            const recipeReq = ids.map(function (id) {
+                return checkId(id);
+            });
+            return Promise.all(recipeReq);
+        })
+        .then(function (recipes) {
+            const filteredRecipes = {};
+            for (let i = 0; i < recipes.length; i++) {
+                const drink = recipes[i];
+                const drinkId = drink.idDrink;
+                const ingrNum = drink["strIngredient" + (visionAIKeywords.length + 1)];
+                if (!filteredRecipes[drinkId] && ingrNum === null && drink.strAlcoholic == "Alcoholic" && drink.strCategory === "Ordinary Drink") {
+                    let count = 0
+                    for (let k in drink) {
+                        const prop = drink[k]
+                        for (let i = 0; i < visionAIKeywords.length; i++) {
+                            if (prop !== null) {
+                                if (k.includes('strIngredient') && prop.toLowerCase().includes(visionAIKeywords[i])) {
+                                    count += 1
+                                }
+                            }
+                        }
+                    }
+                    console.log(count)
+                    if (count == visionAIKeywords.length - 1) {
+                        filteredRecipes[drinkId] = drink;
+                    }
+                }
+            }
+
+            return Object.values(filteredRecipes);
+        })
+        .then(function (filteredRecipes) {
+            console.log(filteredRecipes)
+        })
+
 }
 
 
 function getIds(arr) {
-    let relIngr = [];
-    let ids = [];
-    //console.log(arr)
-    for (let i = 0; i < arr.length; i++) {
-        makeIds(arr, ids, i);
-    }
-    console.log(ids)
-    checkId(ids);
+    const postReqs = arr.map(function (ingr) {
+        return makeIds(ingr);
+    });
+    return Promise.all(postReqs);
 }
 
 
-function makeIds(arr, ids, i) {
-    $.ajax({
-        url: multiIngredientQueryUrl + arr[i],
+function makeIds(ingr) {
+    return $.ajax({
+        url: multiIngredientQueryUrl + ingr,
         method: 'GET'
     }).then(function (response) {
-        let drinksArr = response.drinks;
-        //console.log('i' + i)
-        //console.log(arr[i])
-        //console.log(drinksArr)
-        if (drinksArr !== 'None Found' && drinksArr !== undefined) {
-            //console.log(drinksArr)
-            for (let x = 0; x < drinksArr.length; x++) {
-                //console.log('x' + x)
-                let id = drinksArr[x].idDrink
-                if (!ids.includes(id) || ids.length == 0) {
-                    ids.push(id);
-                    // return $.ajax({
-                    //     url: recipeIdQueryUrl + id,
-                    //     method: 'GET'
-                    // }).then(function (response) {
-                    //     let recipe = response.drinks;
-
-                    //     console.log(recipe);
-
-                    // })
-                    return ids
-                }
-                //console.log(id)
-            }
+        if (!Array.isArray(response.drinks)) {
+            return [];
         }
-        //checkId(ids);
-    })
+        return response.drinks.map(function (drink) {
+            return drink.idDrink;
+        });
+    });
 }
 
-function checkId(arr) {
-    //for (let i = 0; i < arr.length; i++) {
-    let i = 8
-    console.log(arr)
-    console.log(arr[0])
-    $.ajax({
-        url: recipeIdQueryUrl + arr[i],
+function checkId(id) {
+    return $.ajax({
+        url: recipeIdQueryUrl + id,
         method: 'GET'
     }).then(function (response) {
-        console.log(response)
+        return response.drinks[0];
     })
-    //}
 }
 
 
@@ -208,7 +203,7 @@ function getIngredientsList() {
             let ingredient = drinksArr[i].strIngredient1.toLowerCase();
             ingredientsList.push(ingredient);
         }
-        ingredientsFilter(ingredientsList, arrayTextLabel)
+        ingredientsFilter(ingredientsList, visionAIKeywords)
     })
 }
 
