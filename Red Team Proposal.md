@@ -36,12 +36,12 @@
 
 # APIs Used:
     - Google Vision AI
-    - Google Custom Search
+    - CocktailDB
 
 # New Technology:
     - Postman
     - Gcloud SDK
-    - Web Scraper?
+    - RegEx
 
 # Tasks:
     - Front-End: Barry 

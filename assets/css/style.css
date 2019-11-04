@@ -3,3 +3,26 @@
     background-color: #da401a;
     border-color: #ffffff;
 }
+
+.results {
+    color: white;
+}
+
+.navbar {
+    font-family: cursive;
+
+}
+
+.jumbotron {
+    text-align: center;
+}
+
+.display-4 {
+    font-family: cursive;
+}
+
+#instructionspic {
+    width: 950px;
+    height: 600px;
+    text-align: center;
+}
