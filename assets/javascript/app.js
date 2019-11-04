@@ -14,8 +14,8 @@ $("#search-button").on("click", function () {
     console.log(urlSearchVar);
     
 
-
-    const body = {
+    function textDetection() {
+    body = {
         requests: [
             {
                 image: {
@@ -117,15 +117,7 @@ function objectLocal() {
        
     }
 
-    var settings3 = {
-        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
-        "method": "POST",
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "data": JSON.stringify(body3),
-       
-    }
+
     $.ajax(settings).done(function (response) {
 
        console.log(response);
@@ -139,7 +131,6 @@ function objectLocal() {
         // var myJSON = JSON.stringify(resultText);
         // var resultText3 = response.responses[0].textAnnotations[0].description;
         
-        
         }
         $.ajax(settings2).done(function (response2) {
             // WORKING CODE FOR LABEL_DETECTION
@@ -151,12 +142,15 @@ function objectLocal() {
             
              // var myJSON = JSON.stringify(resultLabel);
              // var result3 = response2.responses[0].labelAnnotations[0].description;
-             
+            
+       
          }
              
      })
 
-
+       for (var i=0;i<arrayTextLabel.length;i++) {
+        $(".cocktailResults").append(arrayTextLabel[i]+"<br>");
+       }
         console.log(arrayTextLabel);
 
     })
