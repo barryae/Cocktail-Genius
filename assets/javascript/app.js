@@ -11,7 +11,7 @@ let uploadedImage
 
 $("#search-button").on("click", function () {
     //urlSearchVar = $("#UriSearch").val();
-    console.log(urlSearchVar);
+    
     
 
     function textDetection() {
@@ -42,11 +42,7 @@ function labelDetection() {
         requests: [
             {
                 image: {
-                    source: {
-                        //Figure out how to put our photo here:
-                        imageUri: `${urlSearchVar}`,
-                       
-                    }
+                    content: `${urlSearchVar}`
                 },
                 features: [
                     {
@@ -64,38 +60,13 @@ function labelDetection() {
     }
 }
 
-function objectLocal() {
-    body3 = {
-        requests: [
-            {
-                image: {
-                    source: {
-                        //Figure out how to put our photo here:
-                        imageUri: `${urlSearchVar}`,
-                       
-                    }
-                },
-                features: [
-                    {
-                        maxResults: 10,
-                        //Want to use text as well
-                    
-                        type: "OBJECT_LOCALIZATION", 
-                       
 
-                        
-                    }
-                ]
-            }
-        ]
-    }
-}
 
 
 
     textDetection();
     labelDetection();
-    objectLocal();
+    
 
     var settings = {
         "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
@@ -119,39 +90,33 @@ function objectLocal() {
 
 
     $.ajax(settings).done(function (response) {
-
-       console.log(response);
+        console.log(response);
        var resultText;
-       var arrayTextLabel = [];
+       var visionAIKeywords = [];
         //TEXT DETECTION
-        for (var i=0;i<response.responses[0].textAnnotations.length;i++) {
+        for (var i=1;i<response.responses[0].textAnnotations.length;i++) {
         resultText = response.responses[0].textAnnotations[i].description;
         console.log(response.responses[0].textAnnotations[i].description);
-        arrayTextLabel.push(resultText)
+        visionAIKeywords.push(resultText)
         // var myJSON = JSON.stringify(resultText);
         // var resultText3 = response.responses[0].textAnnotations[0].description;
-        
         }
+
         $.ajax(settings2).done(function (response2) {
             // WORKING CODE FOR LABEL_DETECTION
-              var resultLabel;
-              
+            
              for (var i=0;i<response2.responses[0].labelAnnotations.length;i++){
              resultLabel = response2.responses[0].labelAnnotations[i].description;
-             arrayTextLabel.push(resultLabel);
-            
-             // var myJSON = JSON.stringify(resultLabel);
-             // var result3 = response2.responses[0].labelAnnotations[0].description;
+             console.log(resultLabel);
+
+            visionAIKeywords.push(resultLabel);
             
        
          }
              
      })
 
-       for (var i=0;i<arrayTextLabel.length;i++) {
-        $(".cocktailResults").append(arrayTextLabel[i]+"<br>");
-       }
-        console.log(arrayTextLabel);
+        console.log(visionAIKeywords);
 
     })
     
