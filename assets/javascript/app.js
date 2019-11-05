@@ -46,7 +46,7 @@ var visionAIKeywords = [];
 
 $("#search-button").on("click", function () {
     //urlSearchVar = $("#UriSearch").val();
-
+    $(this).hide();
     function textDetection() {
         body = {
             requests: [
@@ -261,12 +261,17 @@ function queryStringMaker(arr) {
                 let newElement = document.createElement('section')
                     newElement.innerHTML = `
                         <div class="card">
-                            <h3 class="card-title">${filteredRecipes[i].strDrink}</h3>
-                            <img src="${filteredRecipes[i].strDrinkThumb}"</img>
-                            <p>${filteredRecipes[i].strInstructions}</p>
+                            <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
+                            <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
+                            <p> Ingredients: 
+                            ${ozAndIngredient[i]}</p>
+                            <p> Instructions: 
+                            ${filteredRecipes[i].strInstructions}</p>
                             </div>
                         </div>
                         ` 
+                    let ozAndIngredient = []
+                    
                 $(".finalResults").append(newElement)
                 }
             
