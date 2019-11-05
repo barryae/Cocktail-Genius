@@ -280,6 +280,7 @@ function queryStringMaker(arr) {
                 let newElement = document.createElement('section')
                 newElement.innerHTML = `
                         <div class="card">
+                        <h3 class="card-title">${filteredRecipes[i].strDrink}</h3>
                         <div class="row">
                         <div class="col-sm">
                             <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
