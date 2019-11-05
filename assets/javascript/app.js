@@ -307,17 +307,26 @@ function queryStringMaker(arr) {
                 let newElement = document.createElement('section')
                 newElement.innerHTML = `
                         <div class="card">
-                            <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
+                        <div class="row">
+                        <div class="col-sm">
                             <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
-                            <p class="right"> Ingredients: ${finalEverything.text()}</p> 
-                            <p class="right"> Instructions: 
+                        </div>
+                        <div class="col-lg-8">
+                            <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
+                            <p class="rightPic"> Ingredients: ${finalEverything.text()}</p> 
+                            <p class="rightPic"> Instructions: 
                             ${filteredRecipes[i].strInstructions}</p>
-                            </div>
+                        </div>
+                        </div>
                         </div>
                         `.trim()
 
                 $(".finalResults").append(newElement)
             }
+            $(".finalResults").append("<button class='btn btn-secondary'>" + "Search Again" + "</button>");
+            $("button").on("click", function () {
+                location.reload();
+            })
 
         })
 
