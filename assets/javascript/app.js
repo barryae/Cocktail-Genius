@@ -267,30 +267,47 @@ function queryStringMaker(arr) {
                 $('#photo-prompt').text(ingrString(filteredIngredientKeywords))
                 console.log(filteredRecipes[i]);
                 currentRecipe = filteredRecipes[i]
+                finalEverything = $('<div>');
                 function listMeasurements(currentRecipe) {
-                    let finalMeasurements = [];
+                    let finalIngredients = [];
                     for (let i = 0; i < 15; i++) {
                         let currentIngr = currentRecipe['strIngredient' + (i + 1)]
-                        console.log(currentIngr)
                         if (currentIngr !== null) {
-                            finalMeasurements.push(currentIngr);
-                            console.log(finalMeasurements)
+                            finalIngredients.push(currentIngr);
                         }
                     }
-                    console.log(finalMeasurements);
+                    console.log(finalIngredients)
+                    let finalMeas = []
+                    for (let i = 0; i < 15; i++) {
+                        let currentMeas = currentRecipe['strMeasure' + (i + 1)]
+                        if (currentMeas !== null) {
+                            finalMeas.push(currentMeas);
+                        }
+                    }
+                    console.log(finalMeas)
+                    for ( let i = 0; i <finalIngredients.length; i++) {
+                        let addedElement = document.createElement('div')
+                        addedElement.innerHTML = `
+                        ${" " + finalMeas[i] + " " + finalIngredients[i] + ","}`.trim();
+                        console.log(addedElement);
+                        finalEverything.append(addedElement)
+                    }
+                    
                 }
+                console.log(finalEverything)
                 listMeasurements(currentRecipe)
+                
                 let newElement = document.createElement('section')
                 newElement.innerHTML = `
                         <div class="card">
                             <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
                             <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
-                            <p class="right"> Ingredients:</p>    
+                            <p class="right"> Ingredients: ${finalEverything.text()}</p> 
                             <p class="right"> Instructions: 
                             ${filteredRecipes[i].strInstructions}</p>
                             </div>
                         </div>
-                        `
+                        `.trim()
 
                 $(".finalResults").append(newElement)
             }
