@@ -184,7 +184,7 @@ function ingredientsFilter(ingredientsList, arr) {
 
     for (let i = 0; i < arr.length; i++) {
         let keyword = arr[i];
-        console.log('bool', ingredientsList.includes(keyword))
+        //console.log('bool', ingredientsList.includes(keyword))
         if (ingredientsList.includes(keyword) && !filteredIngredientKeywords.includes(keyword)) {
             filteredIngredientKeywords.push(keyword);
         }
@@ -211,7 +211,6 @@ function queryStringMaker(arr) {
             }
         }
     }
-    console.log(queryStrings)
     getIds(queryStrings)
         .then(function (ids) {
             //console.log(ids)
@@ -222,14 +221,15 @@ function queryStringMaker(arr) {
             return Promise.all(recipeReq);
         })
         .then(function (recipes) {
+            console.log(recipes)
             const filteredRecipes = {};
             for (let i = 0; i < recipes.length; i++) {
+                let count = 0
                 const drink = recipes[i];
                 const drinkId = drink.idDrink;
-                const ingrNum = drink["strIngredient" + (filteredIngredientKeywords.length + 1)];
-                console.log(!filteredRecipes[drinkId], ingrNum === null, drink.strAlcoholic == "Alcoholic", drink.strCategory === "Ordinary Drink")
-                if (!filteredRecipes[drinkId] && ingrNum === null && drink.strAlcoholic == "Alcoholic" && drink.strCategory === "Ordinary Drink") {
-                    let count = 0
+                const ingrNum = drink["strIngredient" + (filteredIngredientKeywords.length + 2)];
+                //console.log(!filteredRecipes[drinkId], ingrNum === null, drink.strAlcoholic == "Alcoholic", drink.strCategory === "Ordinary Drink")
+                if (!filteredRecipes[drinkId] && (ingrNum === null || filteredIngredientKeywords.length === 1) && drink.strAlcoholic == "Alcoholic") {
                     for (let k in drink) {
                         const prop = drink[k]
                         for (let i = 0; i < filteredIngredientKeywords.length; i++) {
@@ -240,18 +240,23 @@ function queryStringMaker(arr) {
                             }
                         }
                     }
-                    console.log(count)
-                    if (count == filteredIngredientKeywords.length - 1) {
+                    //console.log(count)
+                    if (count == filteredIngredientKeywords.length && Object.values(filteredRecipes).length < 6 || filteredIngredientKeywords.length === 1 && Object.values(filteredRecipes).length < 6) {
+                        filteredRecipes[drinkId] = drink;
+                    }
+                    else if (count == filteredIngredientKeywords.length - 1 && Object.values(filteredRecipes).length < 6 || filteredIngredientKeywords.length === 1 && Object.values(filteredRecipes).length < 6) {
+                        filteredRecipes[drinkId] = drink;
+                    }
+                    else if (count == filteredIngredientKeywords.length - 2 && Object.values(filteredRecipes).length < 6 || filteredIngredientKeywords.length === 1 && Object.values(filteredRecipes).length < 6) {
                         filteredRecipes[drinkId] = drink;
                     }
                 }
             }
-            console.log(filteredRecipes)
+            //console.log(filteredRecipes)
             return Object.values(filteredRecipes);
         })
         .then(function (filteredRecipes) {
             console.log(filteredRecipes)
-
         })
 
 }
