@@ -262,54 +262,28 @@ function queryStringMaker(arr) {
             return Object.values(filteredRecipes);
         })
         .then(function (filteredRecipes) {
-            for (i = 0; i < filteredRecipes.length; i++) {
+            for (let i = 0; i < filteredRecipes.length; i++) {
                 $('#spinner').hide()
                 $('#photo-prompt').text(ingrString(filteredIngredientKeywords))
-                console.log(filteredRecipes[i]);
-                currentRecipe = filteredRecipes[i]
-                finalEverything = $('<p>');
-                function listMeasurements(currentRecipe) {
-                    let finalIngredients = [];
-                    for (let i = 0; i < 15; i++) {
-                        let currentIngr = currentRecipe['strIngredient' + (i + 1)]
-                        if (currentIngr !== null) {
-                            finalIngredients.push(currentIngr);
-                        }
-                    }
-                    console.log(finalIngredients)
-                    let finalMeas = []
-                    for (let i = 0; i < 15; i++) {
-                        let currentMeas = currentRecipe['strMeasure' + (i + 1)]
-                        if (currentMeas !== null && currentMeas !== undefined) {
-                            finalMeas.push(currentMeas);
-                        }
-                    }
-                    console.log(finalMeas)
-                    for (let i = 0; i < finalIngredients.length; i++) {
-                        let addedElement = document.createElement('p')
-                        addedElement.innerHTML = `
-                        ${" *" + define(finalMeas[i]) + " " + finalIngredients[i] + " "}`;
-                        //console.log(addedElement);
-                        finalEverything.append(addedElement)
-                        function define(meas) {
-                            if (meas !== undefined) {
-                                return meas
-                            } else {
-                                return ''
-                            }
-                        }
-                    }
 
+                const ingredientList = [];
+                const currentRecipe = filteredRecipes[i]
+
+                for (let i = 1; i < 15; i++) {
+                    const ingredient = currentRecipe['strIngredient' + (i)]
+                    const measurement = currentRecipe['strMeasure' + (i)]
+                    if (ingredient) {
+                        ingredientList.push(`<li>${measurement ? measurement : ''} ${ingredient}</li>`)
+                    }
                 }
-                console.log(finalEverything)
-                listMeasurements(currentRecipe)
 
                 let newElement = document.createElement('section')
                 newElement.innerHTML = `
                         <div class="card">
                             <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
                             <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
-                            <p class="right"> Ingredients: ${finalEverything.text()}</p> 
+                            <div class="right"> Ingredients:
+                            <ul id="ingredients-${i}"></ul>
                             <p class="right"> Instructions: 
                             ${filteredRecipes[i].strInstructions}</p>
                             </div>
@@ -317,6 +291,49 @@ function queryStringMaker(arr) {
                         `.trim()
 
                 $(".finalResults").append(newElement)
+
+                let index = i
+                ingredientList.forEach(el => $(`#ingredients-${index}`).append(el))
+
+                // console.log(filteredRecipes[i]);
+                // finalEverything = $('<ul>');
+                // function listMeasurements(currentRecipe) {
+                //     let finalIngredients = [];
+                //     for (let i = 0; i < 15; i++) {
+                //         let currentIngr = currentRecipe['strIngredient' + (i + 1)]
+                //         if (currentIngr !== null) {
+                //             finalIngredients.push(currentIngr);
+                //         }
+                //     }
+                //     console.log(finalIngredients)
+                //     let finalMeas = []
+                //     for (let i = 0; i < 15; i++) {
+                //         let currentMeas = currentRecipe['strMeasure' + (i + 1)]
+                //         if (currentMeas !== null && currentMeas !== undefined) {
+                //             finalMeas.push(currentMeas);
+                //         }
+                //     }
+                //     console.log(finalMeas)
+                //     for (let i = 0; i < finalIngredients.length; i++) {
+                //         let addedElement = document.createElement('li')
+                //         addedElement.innerHTML = `
+                //         ${" *" + define(finalMeas[i]) + " " + finalIngredients[i] + " "}`;
+                //         //console.log(addedElement);
+                //         finalEverything.append(addedElement);
+                //         function define(meas) {
+                //             if (meas !== undefined) {
+                //                 return meas
+                //             } else {
+                //                 return ''
+                //             }
+                //         }
+                //     }
+
+                // }
+
+
+                // console.log(finalEverything)
+                // listMeasurements(currentRecipe)
             }
 
         })
