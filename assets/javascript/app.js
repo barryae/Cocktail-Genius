@@ -280,13 +280,17 @@ function queryStringMaker(arr) {
                 let newElement = document.createElement('section')
                 newElement.innerHTML = `
                         <div class="card">
-                            <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
+                        <div class="row">
+                        <div class="col-sm">
                             <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
+
                             <div class="right"> Ingredients:
                             <ul id="ingredients-${i}"></ul>
                             <p class="right"> Instructions: 
+
                             ${filteredRecipes[i].strInstructions}</p>
-                            </div>
+                        </div>
+                        </div>
                         </div>
                         `.trim()
 
@@ -335,6 +339,10 @@ function queryStringMaker(arr) {
                 // console.log(finalEverything)
                 // listMeasurements(currentRecipe)
             }
+            $(".finalResults").append("<button class='btn btn-secondary'>" + "Search Again" + "</button>");
+            $("button").on("click", function () {
+                location.reload();
+            })
 
         })
 

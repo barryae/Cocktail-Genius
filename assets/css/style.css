@@ -66,6 +66,10 @@ h3 {
 
 }
 
-.right {
+.rightPic {
     float: left;
+}
+
+.btn-secondary {
+    text-align: center;
 }
