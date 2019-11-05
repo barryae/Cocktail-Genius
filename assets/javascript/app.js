@@ -47,6 +47,12 @@ var visionAIKeywords = [];
 $("#search-button").on("click", function () {
     //urlSearchVar = $("#UriSearch").val();
     $(this).hide();
+    let spin = document.createElement('div')
+    spin.innerHTML =
+        `<div class="spinner-border" id="spinner" role="status">
+  <span class="sr-only">Loading...</span>
+    </div>`
+    $(".jumbotron").append(spin)
     function textDetection() {
         body = {
             requests: [
@@ -211,6 +217,7 @@ function queryStringMaker(arr) {
             }
         }
     }
+
     getIds(queryStrings)
         .then(function (ids) {
             //console.log(ids)
@@ -255,35 +262,54 @@ function queryStringMaker(arr) {
             return Object.values(filteredRecipes);
         })
         .then(function (filteredRecipes) {
-            for (i = 0; i < filteredRecipes.length; i++){
-
+            for (i = 0; i < filteredRecipes.length; i++) {
+                $('#spinner').hide()
+                $('#photo-prompt').text(ingrString(filteredIngredientKeywords))
                 console.log(filteredRecipes[i]);
-                function listMeasurements(filteredRecipes) {
+                currentRecipe = filteredRecipes[i]
+                function listMeasurements(currentRecipe) {
                     let finalMeasurements = [];
-                    for (let i=0; i<filteredRecipes.length; i++) {
-                     finalMeasurements.push(filteredRecipes[i].strIngredient1);
-                     console.log(finalMeasurements); 
+                    for (let i = 0; i < 15; i++) {
+                        let currentIngr = currentRecipe['strIngredient' + (i + 1)]
+                        console.log(currentIngr)
+                        if (currentIngr !== null) {
+                            finalMeasurements.push(currentIngr);
+                            console.log(finalMeasurements)
+                        }
                     }
-                  } 
+                    console.log(finalMeasurements);
+                }
+                listMeasurements(currentRecipe)
                 let newElement = document.createElement('section')
-                    newElement.innerHTML = `
+                newElement.innerHTML = `
                         <div class="card">
                             <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
                             <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
-                            <p class="right"> Ingredients:</p>
+                            <p class="right"> Ingredients:</p>    
                             <p class="right"> Instructions: 
                             ${filteredRecipes[i].strInstructions}</p>
                             </div>
                         </div>
-                        ` 
-                    
+                        `
+
                 $(".finalResults").append(newElement)
-                }
-            
+            }
+
         })
 
 }
 
+function ingrString(filteredIngredientKeywords) {
+    let string = "The ingredients we found were: "
+    for (let i = 0; i < filteredIngredientKeywords.length; i++) {
+        string = string + filteredIngredientKeywords[i]
+        if (i < filteredIngredientKeywords.length - 1) {
+            string += ', '
+        }
+    }
+    string += '.'
+    return string
+}
 
 function getIds(arr) {
     const postReqs = arr.map(function (ingr) {
