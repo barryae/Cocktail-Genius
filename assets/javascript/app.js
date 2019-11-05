@@ -4,147 +4,6 @@
 //filter JSON response for meaningful keywords
 //(use a list of liquor types to look for?
 //use a list of all ingredients?)
-
-var urlSearchVar = '';
-let uploadedImage
-
-
-$("#search-button").on("click", function () {
-    //urlSearchVar = $("#UriSearch").val();
-    
-    
-
-    function textDetection() {
-    body = {
-        requests: [
-            {
-                image: {
-                    content: `${urlSearchVar}`
-                },
-                features: [
-                    {
-                        maxResults: 10,
-                        //Want to use text as well
-                    
-                        type: "TEXT_DETECTION", 
-                       
-
-                        
-                    }
-                ]
-            }
-        ]
-    }
-}
-
-function labelDetection() {
-    body2 = {
-        requests: [
-            {
-                image: {
-                    content: `${urlSearchVar}`
-                },
-                features: [
-                    {
-                        maxResults: 10,
-                        //Want to use text as well
-                    
-                        type: "LABEL_DETECTION", 
-                       
-
-                        
-                    }
-                ]
-            }
-        ]
-    }
-}
-
-
-
-
-
-    textDetection();
-    labelDetection();
-    
-
-    var settings = {
-        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
-        "method": "POST",
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "data": JSON.stringify(body),
-       
-    }
-
-    var settings2 = {
-        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
-        "method": "POST",
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "data": JSON.stringify(body2),
-       
-    }
-
-
-    $.ajax(settings).done(function (response) {
-        console.log(response);
-       var resultText;
-       var visionAIKeywords = [];
-        //TEXT DETECTION
-        for (var i=1;i<response.responses[0].textAnnotations.length;i++) {
-        resultText = response.responses[0].textAnnotations[i].description;
-        console.log(response.responses[0].textAnnotations[i].description);
-        visionAIKeywords.push(resultText)
-        // var myJSON = JSON.stringify(resultText);
-        // var resultText3 = response.responses[0].textAnnotations[0].description;
-        }
-
-        $.ajax(settings2).done(function (response2) {
-            // WORKING CODE FOR LABEL_DETECTION
-            
-             for (var i=0;i<response2.responses[0].labelAnnotations.length;i++){
-             resultLabel = response2.responses[0].labelAnnotations[i].description;
-             console.log(resultLabel);
-
-            visionAIKeywords.push(resultLabel);
-            
-       
-         }
-             
-     })
-
-        console.log(visionAIKeywords);
-
-    })
-    
-
-
-
-
-        // var cocktail = {
-        //     "url": "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i="+result3,
-        //     "method": "GET",
-        // }
-                
-        // $.ajax(cocktail).done(function (responseCocktail) {
-        //     console.log(responseCocktail);
-        //     for(let i=0;i<10;i++) {
-        //     var result2 = responseCocktail.drinks[i].strDrink;
-        //     var myJSON2 = JSON.stringify(result2);
-        //     $(".results").append("<h1>"+myJSON2+"</h1>");
-        //     }
-        // })
-
-
-
-
-
-
-});
-
 const realFileBtn = document.getElementById("real-file");
 const customBtn = document.getElementById("custom-button");
 const customTxt = document.getElementById("custom-text");
@@ -165,9 +24,6 @@ realFileBtn.addEventListener("change", function (event) {
     }
 });
 
-
-
-
 $("#real-file").change(function (event) {
     console.log(event.target.files)
     encodeImageFileAsURL(event.target);
@@ -176,32 +32,124 @@ $("#real-file").change(function (event) {
 function encodeImageFileAsURL(element) {
     var file = element.files[0];
     var reader = new FileReader();
-    reader.onloadend = function() {
-     urlSearchVar = reader.result.split(',')[1]
+    reader.onloadend = function () {
+        urlSearchVar = reader.result.split(',')[1]
     }
     reader.readAsDataURL(file);
-  }
+}
 
-//Cocktail DB request:
-//params based on keywords from Vision AI
-//tries out different parameter permutations
-//looks up each of those recipes by id , dumps JSON info for each
-//filters those recipes to those with 5 or less 
-//ingredients (or a number determined by max 
-// number of ingredients)
+//Vision AI
 
-let params = 'gin,lime'
+var urlSearchVar = '';
+let uploadedImage
+var visionAIKeywords = [];
+
+$("#search-button").on("click", function () {
+    //urlSearchVar = $("#UriSearch").val();
+
+    function textDetection() {
+        body = {
+            requests: [
+                {
+                    image: {
+                        content: `${urlSearchVar}`
+                    },
+                    features: [
+                        {
+                            maxResults: 10,
+                            //Want to use text as well
+
+                            type: "TEXT_DETECTION",
 
 
-let visionAIKeywords = [];
+
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+    function labelDetection() {
+        body2 = {
+            requests: [
+                {
+                    image: {
+                        content: `${urlSearchVar}`
+                    },
+                    features: [
+                        {
+                            maxResults: 10,
+                            //Want to use text as well
+
+                            type: "LABEL_DETECTION",
 
 
-//Here starts cocktails DB code:
 
-//keywords from Vision AI image analysis
+                        }
+                    ]
+                }
+            ]
+        }
+    }
 
-//list of ingredients taken from CocktailsDB
+    textDetection();
+    labelDetection();
 
+
+    var settings = {
+        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "data": JSON.stringify(body),
+
+    }
+
+    var settings2 = {
+        "url": "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDtQXAjtldc8mxTZIGCPDDGYuBkg8hpzBE",
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "data": JSON.stringify(body2),
+
+    }
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+        var resultText;
+        //TEXT DETECTION
+        for (var i = 1; i < response.responses[0].textAnnotations.length; i++) {
+            resultText = response.responses[0].textAnnotations[i].description;
+            //console.log(response.responses[0].textAnnotations[i].description);
+            visionAIKeywords.push(resultText.toLowerCase())
+            // var myJSON = JSON.stringify(resultText);
+            // var resultText3 = response.responses[0].textAnnotations[0].description;
+        }
+
+        $.ajax(settings2).done(function (response2) {
+            // WORKING CODE FOR LABEL_DETECTION
+
+            for (var i = 0; i < response2.responses[0].labelAnnotations.length; i++) {
+                resultLabel = response2.responses[0].labelAnnotations[i].description;
+                //console.log(resultLabel);
+
+                visionAIKeywords.push(resultLabel.toLowerCase());
+
+
+            }
+
+        }).then(function (keywords) {
+            console.log(visionAIKeywords)
+            getIngredientsList(visionAIKeywords)
+        })
+    })
+
+});
+
+//Cockatail DB
 
 //partial Url query for the multiingredients search (needs ingredients
 //seperated by commas)
@@ -213,26 +161,40 @@ const recipeIdQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php
 
 //function to test functions specific to Cocktail DB
 //(add to main() later)
-let recipes = [];
-function cocktailDBTest() {
-    const ingredientsList = getIngredientsList();
-    console.log(ingredientsList);
-    ingredientsFilter(ingredientsList);
-    console.log(filteredIngredientKeywords);
+
+function getIngredientsList(visionAIKeywords) {
+    const ingredientsQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
+    return $.ajax({
+        url: ingredientsQueryUrl,
+        method: 'GET'
+    }).then(function (response) {
+        const ingredientsList = [];
+        let drinksArr = response.drinks;
+        for (let i = 0; i < drinksArr.length; i++) {
+            let ingredient = drinksArr[i].strIngredient1.toLowerCase();
+            ingredientsList.push(ingredient);
+        }
+        ingredientsFilter(ingredientsList, visionAIKeywords)
+    })
 }
 
+let filteredIngredientKeywords = [];
 function ingredientsFilter(ingredientsList, arr) {
-    let filteredIngredientKeywords = [];
+    console.log(ingredientsList, arr);
+
     for (let i = 0; i < arr.length; i++) {
         let keyword = arr[i];
-        if (ingredientsList.includes(keyword)) {
+        console.log('bool', ingredientsList.includes(keyword))
+        if (ingredientsList.includes(keyword) && !filteredIngredientKeywords.includes(keyword)) {
             filteredIngredientKeywords.push(keyword);
         }
     }
+    console.log('filtered keyword', filteredIngredientKeywords)
     queryStringMaker(filteredIngredientKeywords)
 }
 
 function queryStringMaker(arr) {
+    console.log(arr)
     let queryStrings = []
     for (let i = 0; i < arr.length; i++) {
         queryStrings.push(arr[i])
@@ -249,8 +211,10 @@ function queryStringMaker(arr) {
             }
         }
     }
+    console.log(queryStrings)
     getIds(queryStrings)
         .then(function (ids) {
+            //console.log(ids)
             ids = ids.flat()
             const recipeReq = ids.map(function (id) {
                 return checkId(id);
@@ -262,30 +226,32 @@ function queryStringMaker(arr) {
             for (let i = 0; i < recipes.length; i++) {
                 const drink = recipes[i];
                 const drinkId = drink.idDrink;
-                const ingrNum = drink["strIngredient" + (visionAIKeywords.length + 1)];
+                const ingrNum = drink["strIngredient" + (filteredIngredientKeywords.length + 1)];
+                console.log(!filteredRecipes[drinkId], ingrNum === null, drink.strAlcoholic == "Alcoholic", drink.strCategory === "Ordinary Drink")
                 if (!filteredRecipes[drinkId] && ingrNum === null && drink.strAlcoholic == "Alcoholic" && drink.strCategory === "Ordinary Drink") {
                     let count = 0
                     for (let k in drink) {
                         const prop = drink[k]
-                        for (let i = 0; i < visionAIKeywords.length; i++) {
+                        for (let i = 0; i < filteredIngredientKeywords.length; i++) {
                             if (prop !== null) {
-                                if (k.includes('strIngredient') && prop.toLowerCase().includes(visionAIKeywords[i])) {
+                                if (k.includes('strIngredient') && prop.toLowerCase().includes(filteredIngredientKeywords[i])) {
                                     count += 1
                                 }
                             }
                         }
                     }
                     console.log(count)
-                    if (count == visionAIKeywords.length - 1) {
+                    if (count == filteredIngredientKeywords.length - 1) {
                         filteredRecipes[drinkId] = drink;
                     }
                 }
             }
-
+            console.log(filteredRecipes)
             return Object.values(filteredRecipes);
         })
         .then(function (filteredRecipes) {
             console.log(filteredRecipes)
+
         })
 
 }
@@ -326,24 +292,8 @@ function checkId(id) {
 
 
 
-function getIngredientsList() {
-    const ingredientsQueryUrl = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
-    $.ajax({
-        url: ingredientsQueryUrl,
-        method: 'GET'
-    }).then(function (response) {
-        const ingredientsList = [];
-        let drinksArr = response.drinks;
-        for (let i = 0; i < drinksArr.length; i++) {
-            let ingredient = drinksArr[i].strIngredient1.toLowerCase();
-            ingredientsList.push(ingredient);
-        }
-        ingredientsFilter(ingredientsList, visionAIKeywords)
-    })
-}
 
 
-getIngredientsList();
 
 
 //format 
