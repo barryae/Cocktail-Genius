@@ -252,11 +252,25 @@ function queryStringMaker(arr) {
                     }
                 }
             }
-            //console.log(filteredRecipes)
             return Object.values(filteredRecipes);
         })
         .then(function (filteredRecipes) {
-            console.log(filteredRecipes)
+            for (i = 0; i < filteredRecipes.length; i++){
+
+                console.log(filteredRecipes[i]);
+                let newElement = document.createElement('section')
+                    newElement.innerHTML = `
+                        <div class="card">
+                            <div class="card-title">
+                            <img src="${filteredRecipes[i].strDrinkThumb}"</img>
+                            <h1>${filteredRecipes[i].strDrink}</h1>
+                            <p>${filteredRecipes[i].strInstructions}</p>
+                            </div>
+                        </div>
+                        ` 
+                $("#finalResults").append(newElement)
+                }
+            
         })
 
 }
