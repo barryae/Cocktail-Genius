@@ -258,19 +258,24 @@ function queryStringMaker(arr) {
             for (i = 0; i < filteredRecipes.length; i++){
 
                 console.log(filteredRecipes[i]);
+                function listMeasurements(filteredRecipes) {
+                    let finalMeasurements = [];
+                    for (let i=0; i<filteredRecipes.length; i++) {
+                     finalMeasurements.push(filteredRecipes[i].strIngredient1);
+                     console.log(finalMeasurements); 
+                    }
+                  } 
                 let newElement = document.createElement('section')
                     newElement.innerHTML = `
                         <div class="card">
                             <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
                             <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
-                            <p> Ingredients: 
-                            ${ozAndIngredient[i]}</p>
-                            <p> Instructions: 
+                            <p class="right"> Ingredients:</p>
+                            <p class="right"> Instructions: 
                             ${filteredRecipes[i].strInstructions}</p>
                             </div>
                         </div>
                         ` 
-                    let ozAndIngredient = []
                     
                 $(".finalResults").append(newElement)
                 }
