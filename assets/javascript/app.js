@@ -323,6 +323,10 @@ function queryStringMaker(arr) {
 
                 $(".finalResults").append(newElement)
             }
+            $(".finalResults").append("<button class='btn btn-secondary'>" + "Search Again" + "</button>");
+            $("button").on("click", function () {
+                location.reload();
+            })
 
         })
 
