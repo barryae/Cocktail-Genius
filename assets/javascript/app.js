@@ -267,7 +267,7 @@ function queryStringMaker(arr) {
                 $('#photo-prompt').text(ingrString(filteredIngredientKeywords))
                 console.log(filteredRecipes[i]);
                 currentRecipe = filteredRecipes[i]
-                finalEverything = $('<div>');
+                finalEverything = $('<p>');
                 function listMeasurements(currentRecipe) {
                     let finalIngredients = [];
                     for (let i = 0; i < 15; i++) {
@@ -280,23 +280,30 @@ function queryStringMaker(arr) {
                     let finalMeas = []
                     for (let i = 0; i < 15; i++) {
                         let currentMeas = currentRecipe['strMeasure' + (i + 1)]
-                        if (currentMeas !== null) {
+                        if (currentMeas !== null && currentMeas !== undefined) {
                             finalMeas.push(currentMeas);
                         }
                     }
                     console.log(finalMeas)
-                    for ( let i = 0; i <finalIngredients.length; i++) {
-                        let addedElement = document.createElement('div')
+                    for (let i = 0; i < finalIngredients.length; i++) {
+                        let addedElement = document.createElement('p')
                         addedElement.innerHTML = `
-                        ${" " + finalMeas[i] + " " + finalIngredients[i] + ","}`.trim();
-                        console.log(addedElement);
+                        ${" *" + define(finalMeas[i]) + " " + finalIngredients[i] + " "}`;
+                        //console.log(addedElement);
                         finalEverything.append(addedElement)
+                        function define(meas) {
+                            if (meas !== undefined) {
+                                return meas
+                            } else {
+                                return ''
+                            }
+                        }
                     }
-                    
+
                 }
                 console.log(finalEverything)
                 listMeasurements(currentRecipe)
-                
+
                 let newElement = document.createElement('section')
                 newElement.innerHTML = `
                         <div class="card">
