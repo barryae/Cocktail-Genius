@@ -4,6 +4,9 @@ body {
     background-size: 100%;
 }
 
+.right {
+    padding: 1rem
+}
 
 .btn-primary {
     color: #fff;
@@ -52,6 +55,8 @@ img {
     width: 300px;
     height:300px;
     float:left;
+    margin-right: 2rem;
+    
 }
 
 h3 {
