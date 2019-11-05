@@ -47,3 +47,9 @@ img {
 .cocktailResults {
     color: white;
 }
+
+#cardPics {
+    width: 300px;
+    height:300px;
+    float:right;
+}

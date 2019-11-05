@@ -261,14 +261,13 @@ function queryStringMaker(arr) {
                 let newElement = document.createElement('section')
                     newElement.innerHTML = `
                         <div class="card">
-                            <div class="card-title">
+                            <h3 class="card-title">${filteredRecipes[i].strDrink}</h3>
                             <img src="${filteredRecipes[i].strDrinkThumb}"</img>
-                            <h1>${filteredRecipes[i].strDrink}</h1>
                             <p>${filteredRecipes[i].strInstructions}</p>
                             </div>
                         </div>
                         ` 
-                $("#finalResults").append(newElement)
+                $(".finalResults").append(newElement)
                 }
             
         })
