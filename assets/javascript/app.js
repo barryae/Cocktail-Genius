@@ -46,7 +46,7 @@ var visionAIKeywords = [];
 
 $("#search-button").on("click", function () {
     //urlSearchVar = $("#UriSearch").val();
-
+    $(this).hide();
     function textDetection() {
         body = {
             requests: [
@@ -252,11 +252,34 @@ function queryStringMaker(arr) {
                     }
                 }
             }
-            //console.log(filteredRecipes)
             return Object.values(filteredRecipes);
         })
         .then(function (filteredRecipes) {
-            console.log(filteredRecipes)
+            for (i = 0; i < filteredRecipes.length; i++){
+
+                console.log(filteredRecipes[i]);
+                function listMeasurements(filteredRecipes) {
+                    let finalMeasurements = [];
+                    for (let i=0; i<filteredRecipes.length; i++) {
+                     finalMeasurements.push(filteredRecipes[i].strIngredient1);
+                     console.log(finalMeasurements); 
+                    }
+                  } 
+                let newElement = document.createElement('section')
+                    newElement.innerHTML = `
+                        <div class="card">
+                            <h3 class="card-title"> Name: ${filteredRecipes[i].strDrink}</h3>
+                            <img src="${filteredRecipes[i].strDrinkThumb}" id="cardPics" ></img>
+                            <p class="right"> Ingredients:</p>
+                            <p class="right"> Instructions: 
+                            ${filteredRecipes[i].strInstructions}</p>
+                            </div>
+                        </div>
+                        ` 
+                    
+                $(".finalResults").append(newElement)
+                }
+            
         })
 
 }
