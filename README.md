@@ -48,3 +48,4 @@ Tasks:
 - Custom Search Engine API: Oliver
 - Vision AI API: Neely & James
 
+Link to deployed project: https://barryae.github.io/Cocktail-Genius/index.html
