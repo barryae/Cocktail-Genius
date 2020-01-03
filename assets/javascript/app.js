@@ -1,9 +1,4 @@
-//Image upload
 
-//Vision AI API request:
-//filter JSON response for meaningful keywords
-//(use a list of liquor types to look for?
-//use a list of all ingredients?)
 const realFileBtn = document.getElementById("real-file");
 const customBtn = document.getElementById("custom-button");
 const customTxt = document.getElementById("custom-text");
@@ -300,45 +295,6 @@ function queryStringMaker(arr) {
                 let index = i
                 ingredientList.forEach(el => $(`#ingredients-${index}`).append(el))
 
-                // console.log(filteredRecipes[i]);
-                // finalEverything = $('<ul>');
-                // function listMeasurements(currentRecipe) {
-                //     let finalIngredients = [];
-                //     for (let i = 0; i < 15; i++) {
-                //         let currentIngr = currentRecipe['strIngredient' + (i + 1)]
-                //         if (currentIngr !== null) {
-                //             finalIngredients.push(currentIngr);
-                //         }
-                //     }
-                //     console.log(finalIngredients)
-                //     let finalMeas = []
-                //     for (let i = 0; i < 15; i++) {
-                //         let currentMeas = currentRecipe['strMeasure' + (i + 1)]
-                //         if (currentMeas !== null && currentMeas !== undefined) {
-                //             finalMeas.push(currentMeas);
-                //         }
-                //     }
-                //     console.log(finalMeas)
-                //     for (let i = 0; i < finalIngredients.length; i++) {
-                //         let addedElement = document.createElement('li')
-                //         addedElement.innerHTML = `
-                //         ${" *" + define(finalMeas[i]) + " " + finalIngredients[i] + " "}`;
-                //         //console.log(addedElement);
-                //         finalEverything.append(addedElement);
-                //         function define(meas) {
-                //             if (meas !== undefined) {
-                //                 return meas
-                //             } else {
-                //                 return ''
-                //             }
-                //         }
-                //     }
-
-                // }
-
-
-                // console.log(finalEverything)
-                // listMeasurements(currentRecipe)
             }
             $(".finalResults").append("<button class='btn btn-secondary'>" + "Search Again" + "</button>");
             $("button").on("click", function () {
@@ -394,16 +350,4 @@ function checkId(id) {
     })
 }
 
-
-
-
-
-
-
-//format 
-// Title of Cocktail
-// Image
-// Ingredients + amounts
-// instructions
-// glass?
 
